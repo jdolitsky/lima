@@ -24,6 +24,10 @@ if [ "${LIMA_CIDATA_CONTAINERD_SYSTEM}" = 1 ]; then
     [proxy_plugins."stargz"]
       type = "snapshot"
       address = "/run/containerd-stargz-grpc/containerd-stargz-grpc.sock"
+  # For Docker Hub images, configure GCR mirror to prevent rate limiting
+  [plugins."io.containerd.grpc.v1.cri".registry.mirrors]
+    [plugins."io.containerd.grpc.v1.cri".registry.mirrors."docker.io"]
+      endpoint = ["https://mirror.gcr.io"]
 EOF
 	systemctl enable --now containerd buildkit stargz-snapshotter
 fi
